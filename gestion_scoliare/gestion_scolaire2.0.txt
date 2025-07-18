@@ -1,0 +1,59 @@
+CREATE TABLE Role(
+   id SERIAL,
+   type VARCHAR(50)  NOT NULL,
+   PRIMARY KEY(id)
+);
+
+CREATE TABLE Class(
+   id SERIAL,
+   name VARCHAR(50) ,
+   PRIMARY KEY(id),
+   UNIQUE(name)
+);
+
+CREATE TABLE Room(
+   id SERIAL,
+   id_class INTEGER,
+   PRIMARY KEY(id),
+   UNIQUE(id_class),
+   FOREIGN KEY(id_class) REFERENCES Class(id)
+);
+
+CREATE TABLE Person(
+   id SERIAL,
+   last_name VARCHAR(50)  NOT NULL,
+   first_name VARCHAR(50)  NOT NULL,
+   birthday DATE NOT NULL,
+   id_class INTEGER,
+   id_role INTEGER,
+   PRIMARY KEY(id),
+   FOREIGN KEY(id_class) REFERENCES Class(id),
+   FOREIGN KEY(id_role) REFERENCES Role(id)
+);
+
+CREATE TABLE Subject(
+   id SERIAL,
+   subject VARCHAR(50)  NOT NULL,
+   id_teacher INTEGER,
+   PRIMARY KEY(id),
+   FOREIGN KEY(id_teacher) REFERENCES Person(id)
+);
+
+CREATE TABLE Grade(
+   id_subject INTEGER,
+   note NUMERIC(15,2)  ,
+   id_student INTEGER NOT NULL,
+   PRIMARY KEY(id_subject),
+   UNIQUE(id_student),
+   FOREIGN KEY(id_subject) REFERENCES Subject(id),
+   FOREIGN KEY(id_student) REFERENCES Person(id)
+);
+
+CREATE TABLE Teaching(
+   id_class INTEGER,
+   id_subject INTEGER,
+   quota SMALLINT,
+   PRIMARY KEY(id_class, id_subject),
+   FOREIGN KEY(id_class) REFERENCES Class(id),
+   FOREIGN KEY(id_subject) REFERENCES Subject(id)
+);

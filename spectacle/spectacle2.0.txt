@@ -1,0 +1,108 @@
+CREATE TABLE Room(
+   id SERIAL,
+   name VARCHAR(50)  NOT NULL,
+   address VARCHAR(100)  NOT NULL,
+   phone VARCHAR(15)  NOT NULL,
+   email VARCHAR(50)  NOT NULL,
+   website VARCHAR(100)  NOT NULL,
+   PRIMARY KEY(id)
+);
+
+CREATE TABLE Show(
+   id SERIAL,
+   name VARCHAR(50)  NOT NULL,
+   begin_date DATE NOT NULL,
+   end_date DATE NOT NULL,
+   price NUMERIC(15,2)   NOT NULL,
+   id_room INTEGER,
+   PRIMARY KEY(id),
+   FOREIGN KEY(id_room) REFERENCES Room(id)
+);
+
+CREATE TABLE Representation(
+   id SERIAL,
+   beginning TIME NOT NULL,
+   ending TIME NOT NULL,
+   id_show INTEGER,
+   PRIMARY KEY(id),
+   FOREIGN KEY(id_show) REFERENCES Show(id)
+);
+
+CREATE TABLE Theatre(
+   id_spectacle INTEGER,
+   PRIMARY KEY(id_spectacle),
+   FOREIGN KEY(id_spectacle) REFERENCES Show(id)
+);
+
+CREATE TABLE Concert(
+   id_spectacle INTEGER,
+   PRIMARY KEY(id_spectacle),
+   FOREIGN KEY(id_spectacle) REFERENCES Show(id)
+);
+
+CREATE TABLE Person(
+   id SERIAL,
+   last_name VARCHAR(50)  NOT NULL,
+   first_name VARCHAR(50)  NOT NULL,
+   email VARCHAR(100) ,
+   phone VARCHAR(15)  NOT NULL,
+   PRIMARY KEY(id)
+);
+
+CREATE TABLE Comedien(
+   id SERIAL,
+   id_person INTEGER NOT NULL,
+   PRIMARY KEY(id),
+   UNIQUE(id_person),
+   FOREIGN KEY(id_person) REFERENCES Person(id)
+);
+
+CREATE TABLE Technicien(
+   id SERIAL,
+   id_person INTEGER NOT NULL,
+   PRIMARY KEY(id),
+   UNIQUE(id_person),
+   FOREIGN KEY(id_person) REFERENCES Person(id)
+);
+
+CREATE TABLE Spectator(
+   id SERIAL,
+   id_person INTEGER NOT NULL,
+   PRIMARY KEY(id),
+   UNIQUE(id_person),
+   FOREIGN KEY(id_person) REFERENCES Person(id)
+);
+
+CREATE TABLE Reservation(
+   id SERIAL,
+   _date_ DATE NOT NULL,
+   places INTEGER NOT NULL,
+   total_price NUMERIC(15,2)   NOT NULL,
+   id_spectateur INTEGER,
+   PRIMARY KEY(id),
+   FOREIGN KEY(id_spectateur) REFERENCES Spectator(id)
+);
+
+CREATE TABLE Work(
+   id_spectacle_id_theatre INTEGER,
+   id_technicien INTEGER,
+   PRIMARY KEY(id_spectacle_id_theatre, id_technicien),
+   FOREIGN KEY(id_spectacle_id_theatre) REFERENCES Theatre(id_spectacle),
+   FOREIGN KEY(id_technicien) REFERENCES Technicien(id)
+);
+
+CREATE TABLE Contribut(
+   id_spectacle_id_theatre INTEGER,
+   id_comedien INTEGER,
+   PRIMARY KEY(id_spectacle_id_theatre, id_comedien),
+   FOREIGN KEY(id_spectacle_id_theatre) REFERENCES Theatre(id_spectacle),
+   FOREIGN KEY(id_comedien) REFERENCES Comedien(id)
+);
+
+CREATE TABLE Participate(
+   id_representation INTEGER,
+   id_reservation INTEGER,
+   PRIMARY KEY(id_representation, id_reservation),
+   FOREIGN KEY(id_representation) REFERENCES Representation(id),
+   FOREIGN KEY(id_reservation) REFERENCES Reservation(id)
+);

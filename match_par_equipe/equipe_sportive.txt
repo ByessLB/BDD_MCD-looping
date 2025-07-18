@@ -1,0 +1,47 @@
+CREATE TABLE Team(
+   id SERIAL,
+   name VARCHAR(50)  NOT NULL,
+   creation_date DATE NOT NULL,
+   PRIMARY KEY(id)
+);
+
+CREATE TABLE Role(
+   id SERIAL,
+   type VARCHAR(50)  NOT NULL,
+   PRIMARY KEY(id)
+);
+
+CREATE TABLE Person(
+   id SERIAL,
+   last_name VARCHAR(50)  NOT NULL,
+   first_name VARCHAR(50)  NOT NULL,
+   id_team INTEGER,
+   PRIMARY KEY(id),
+   FOREIGN KEY(id_team) REFERENCES Team(id)
+);
+
+CREATE TABLE _Match_(
+   id SERIAL,
+   _date DATE NOT NULL,
+   _hour TIME NOT NULL,
+   id_referee INTEGER,
+   PRIMARY KEY(id),
+   FOREIGN KEY(id_referee) REFERENCES Person(id)
+);
+
+CREATE TABLE registration(
+   id_team INTEGER,
+   id_match INTEGER,
+   score VARCHAR(50) ,
+   PRIMARY KEY(id_team, id_match),
+   FOREIGN KEY(id_team) REFERENCES Team(id),
+   FOREIGN KEY(id_match) REFERENCES _Match_(id)
+);
+
+CREATE TABLE Assignation(
+   id INTEGER,
+   id_role INTEGER,
+   PRIMARY KEY(id, id_role),
+   FOREIGN KEY(id) REFERENCES Person(id),
+   FOREIGN KEY(id_role) REFERENCES Role(id)
+);
