@@ -1,0 +1,112 @@
+CREATE TABLE Role(
+   id SERIAL,
+   name VARCHAR(50)  NOT NULL,
+   PRIMARY KEY(id)
+);
+
+CREATE TABLE Country(
+   code_iso VARCHAR(2) ,
+   name VARCHAR(50)  NOT NULL,
+   PRIMARY KEY(code_iso)
+);
+
+CREATE TABLE Station(
+   id SERIAL,
+   name VARCHAR(50)  NOT NULL,
+   altitude INTEGER NOT NULL,
+   PRIMARY KEY(id)
+);
+
+CREATE TABLE Team(
+   id SERIAL,
+   name VARCHAR(50)  NOT NULL,
+   PRIMARY KEY(id)
+);
+
+CREATE TABLE Responsable(
+   id SMALLINT,
+   name VARCHAR(50)  NOT NULL,
+   address VARCHAR(100)  NOT NULL,
+   phone VARCHAR(15)  NOT NULL,
+   id_1 SMALLINT,
+   code_iso VARCHAR(2)  NOT NULL,
+   PRIMARY KEY(id),
+   FOREIGN KEY(id_1) REFERENCES Responsable(id),
+   FOREIGN KEY(code_iso) REFERENCES Country(code_iso)
+);
+
+CREATE TABLE Discipline(
+   id SERIAL,
+   name VARCHAR(50)  NOT NULL,
+   id_role INTEGER NOT NULL,
+   id_responsable SMALLINT NOT NULL,
+   PRIMARY KEY(id),
+   UNIQUE(id_role),
+   UNIQUE(id_responsable),
+   FOREIGN KEY(id_role) REFERENCES Role(id),
+   FOREIGN KEY(id_responsable) REFERENCES Responsable(id)
+);
+
+CREATE TABLE Athlete(
+   id SERIAL,
+   last_name VARCHAR(50)  NOT NULL,
+   first_name VARCHAR(50)  NOT NULL,
+   birthday DATE,
+   id_team INTEGER,
+   id_country VARCHAR(2)  NOT NULL,
+   PRIMARY KEY(id),
+   FOREIGN KEY(id_team) REFERENCES Team(id),
+   FOREIGN KEY(id_country) REFERENCES Country(code_iso)
+);
+
+CREATE TABLE Test(
+   code_alphabetique VARCHAR(2) ,
+   type VARCHAR(50)  NOT NULL,
+   start_period DATE NOT NULL,
+   end_period DATE NOT NULL,
+   id INTEGER NOT NULL,
+   id_station INTEGER NOT NULL,
+   PRIMARY KEY(code_alphabetique),
+   FOREIGN KEY(id) REFERENCES Discipline(id),
+   FOREIGN KEY(id_station) REFERENCES Station(id)
+);
+
+CREATE TABLE Manche(
+   Id_Manche SERIAL,
+   duration TIME NOT NULL,
+   date_time TIMESTAMP,
+   id_test VARCHAR(2) ,
+   PRIMARY KEY(Id_Manche),
+   FOREIGN KEY(id_test) REFERENCES Test(code_alphabetique)
+);
+
+CREATE TABLE Responsability(
+   id_responsable SMALLINT,
+   id_role INTEGER,
+   id_test VARCHAR(2) ,
+   PRIMARY KEY(id_responsable, id_role, id_test),
+   FOREIGN KEY(id_responsable) REFERENCES Responsable(id),
+   FOREIGN KEY(id_role) REFERENCES Role(id),
+   FOREIGN KEY(id_test) REFERENCES Test(code_alphabetique)
+);
+
+CREATE TABLE Participate(
+   id_athlete INTEGER,
+   id_manche INTEGER,
+   id_team INTEGER,
+   PRIMARY KEY(id_athlete, id_manche, id_team),
+   FOREIGN KEY(id_athlete) REFERENCES Athlete(id),
+   FOREIGN KEY(id_manche) REFERENCES Manche(Id_Manche),
+   FOREIGN KEY(id_team) REFERENCES Team(id)
+);
+
+CREATE TABLE Participation(
+   code_alphabetique VARCHAR(2) ,
+   id INTEGER,
+   dossard SMALLINT NOT NULL,
+   medal VARCHAR(15)  NOT NULL,
+   PRIMARY KEY(code_alphabetique, id),
+   UNIQUE(dossard),
+   FOREIGN KEY(code_alphabetique) REFERENCES Test(code_alphabetique),
+   FOREIGN KEY(id) REFERENCES Athlete(id)
+);
