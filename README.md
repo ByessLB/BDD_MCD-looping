@@ -7,8 +7,8 @@ Au travers de divers exercices de conception de base de données, j'ai pu mettre
 
 ## Exercices
 
-**X** scripts d'exercices sont disponibles dans divers dossiers :
+Divers scripts d'exercices sont disponibles dans divers dossiers :
 - gestion_scolaire
 - match_par_equipe
 - spectacle
-- *
+- gestion_jo
